@@ -1,14 +1,11 @@
 import type { Book, BookCategory } from "./shared/types/book.type";
 import type { Library } from "./shared/types/library.type";
-import type {
-  Order,
-  OrderStatus,
-  OrderWithDetails,
-} from "./shared/types/order.type";
+import type { Order, OrderWithDetails } from "./shared/types/order.type";
 import { calculateBookPrice } from "./utils/calculateTotalBookPrice";
 
 const STORAGE_KEY = "pixel-app:categories";
 const ORDERS_STORAGE_KEY = "pixel-app:myorders";
+
 const API_DELAY_MS = 500;
 let myorders: Order[] = [];
 
@@ -328,37 +325,6 @@ export function sleep(milliseconds: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, milliseconds));
 }
 
-function isBook(value: unknown): value is Book {
-  if (typeof value !== "object" || value === null) {
-    return false;
-  }
-
-  const book = value as Record<string, unknown>;
-  return (
-    typeof book.id === "string" &&
-    typeof book.title === "string" &&
-    typeof book.pages === "number" &&
-    typeof book.description === "string" &&
-    typeof book.basePrice === "number" &&
-    (typeof book.thumbnailUrl === "string" || book.thumbnailUrl === null) &&
-    typeof book.rating === "number"
-  );
-}
-
-function isBookCategory(value: unknown): value is BookCategory {
-  if (typeof value !== "object" || value === null) {
-    return false;
-  }
-
-  const category = value as Record<string, unknown>;
-  return (
-    typeof category.id === "string" &&
-    typeof category.name === "string" &&
-    Array.isArray(category.books) &&
-    category.books.every(isBook)
-  );
-}
-
 function getStoredCategories(): BookCategory[] {
   const storedCategories = localStorage.getItem(STORAGE_KEY);
 
@@ -367,17 +333,7 @@ function getStoredCategories(): BookCategory[] {
     return categories;
   }
 
-  const parsedCategories: unknown = JSON.parse(storedCategories);
-  if (
-    !Array.isArray(parsedCategories) ||
-    !parsedCategories.every(isBookCategory)
-  ) {
-    throw new Error(
-      `Invalid category data in localStorage key "${STORAGE_KEY}".`,
-    );
-  }
-
-  return parsedCategories;
+  return JSON.parse(storedCategories) as BookCategory[];
 }
 
 export async function getBooks(): Promise<BookCategory[]> {
@@ -402,46 +358,13 @@ export async function getLibraries() {
   return libraries;
 }
 
-const orderStatuses: OrderStatus[] = [
-  "PENDING",
-  "ACCEPTED",
-  "PAID",
-  "FULFILLED",
-  "CANCELLED",
-  "REJECTED",
-];
-
-function isOrder(value: unknown): value is Order {
-  if (typeof value !== "object" || value === null) {
-    return false;
-  }
-
-  const order = value as Record<string, unknown>;
-  return (
-    typeof order.id === "string" &&
-    typeof order.bookId === "string" &&
-    typeof order.libraryId === "string" &&
-    typeof order.sentAt === "string" &&
-    !Number.isNaN(Date.parse(order.sentAt)) &&
-    typeof order.status === "string" &&
-    orderStatuses.includes(order.status as OrderStatus)
-  );
-}
-
 function getStoredOrders(): Order[] {
   const storedOrders = localStorage.getItem(ORDERS_STORAGE_KEY);
   if (storedOrders === null) {
     return myorders;
   }
 
-  const parsedOrders: unknown = JSON.parse(storedOrders);
-  if (!Array.isArray(parsedOrders) || !parsedOrders.every(isOrder)) {
-    throw new Error(
-      `Invalid order data in localStorage key "${ORDERS_STORAGE_KEY}".`,
-    );
-  }
-
-  myorders = parsedOrders;
+  myorders = JSON.parse(storedOrders) as Order[];
   return myorders;
 }
 
@@ -495,7 +418,7 @@ export async function createOrder(
   libraryId: string,
 ): Promise<Order> {
   await sleep(API_DELAY_MS);
-
+  
   const book = await getBookById(bookId);
   if (!book) {
     throw new Error(`Cannot create an order: book "${bookId}" was not found.`);

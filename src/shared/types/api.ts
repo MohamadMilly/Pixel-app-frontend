@@ -9,3 +9,4 @@ export type ApiClient = {
   getBooks: () => Promise<BookCategory[]>;
   getMyOrdersWithDetails: () => Promise<OrderWithDetails[]>;
 };
+
