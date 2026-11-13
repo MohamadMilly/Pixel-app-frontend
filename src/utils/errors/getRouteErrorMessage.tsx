@@ -1,6 +1,6 @@
 import { isRouteErrorResponse } from "react-router";
 
-export function getErrorMessage(error: unknown) {
+export function getRouteErrorMessage(error: unknown) {
   let title = "حدث خطأ غير معروف";
   let content: string | null = null;
   if (isRouteErrorResponse(error)) {

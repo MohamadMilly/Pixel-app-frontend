@@ -3,12 +3,12 @@ import { TriangleAlert } from "lucide-react";
 import { Heading } from "../../ui/Heading";
 import { Text } from "../../ui/Text";
 import { Button } from "../../ui/Button";
-import { getErrorMessage } from "../../../utils/errors/getErrorMessage";
+import { getRouteErrorMessage } from "../../../utils/errors/getRouteErrorMessage";
 
 export function GlobalErrorBoundary() {
   const navigate = useNavigate();
   const error = useRouteError();
-  const { content, title } = getErrorMessage(error);
+  const { content, title } = getRouteErrorMessage(error);
   
   return (
     <main

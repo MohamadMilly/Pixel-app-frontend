@@ -58,15 +58,15 @@ export class AuthApi {
     return response.data;
   }
   async loginAdmin({password,username}) {
-
+  // complete
   }
   
   refreshToken({refreshToken}: RefreshRequestDto) {
-  
+  // comlpete 
   }
   
   logout({refreshToken,allSessions}:LogoutRequestDto) {
-    
+    // complete
   }
 }
 
