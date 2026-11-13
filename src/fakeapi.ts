@@ -1,3 +1,5 @@
+// THIS FILE IS NOT FOR USE ANYMORE ,
+//  DELETE IT AND REPLACE IT WITH THE REAL API CONNECRIONS AS MENTIONED IN THE PLAN
 import type { Book, BookCategory } from "./shared/types/book.type";
 import type { Library } from "./shared/types/library.type";
 import type { Order, OrderWithDetails } from "./shared/types/order.type";
@@ -418,7 +420,7 @@ export async function createOrder(
   libraryId: string,
 ): Promise<Order> {
   await sleep(API_DELAY_MS);
-  
+
   const book = await getBookById(bookId);
   if (!book) {
     throw new Error(`Cannot create an order: book "${bookId}" was not found.`);
