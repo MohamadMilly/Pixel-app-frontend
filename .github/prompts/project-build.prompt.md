@@ -101,11 +101,11 @@ To validate your work, ensure the following:
 
 ## Work Plan
 
-1. First, refactor the current app structure to features-based (it is small at the moment so it will be easy), 
+1. First, refactor the current app structure to features-based (it is small at the moment so it will be easy),
    stick with server resposne types , and change the existing types if there is a conflict.
    Don't use fakeapi.ts , delete it and use real connections .
 2. Read the attached folder structure diagram.
-3. Read the API endpoints and analyze all endpoints with request/response types and interfaces with validation rules and role access from the link [repo]().
+3. Read the API endpoints and analyze all endpoints with request/response types and interfaces with validation rules and role access from the link [repo](https://github.com/MohamadMilly/Pixel-app-api.git).
 4. Start by the auth feature with the protected route and account loader.
 5. Create all feature folders just like they are in the API repository.
 6. Create all related pages based on ROLE.
